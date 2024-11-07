@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardar Ubicación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guardar Ubicación</h1>
+    <div id="status">Cargando ubicación...</div>
+
+    <script>
+        // Función para obtener la ubicación usando ipinfo.io
+        async function getLocation() {
+            try {
+                const response = await fetch('https://ipinfo.io/json?token=f01c886651ecad');
+                const data = await response.json();
+                console.log('Datos obtenidos de la API:', data);
+                
+                // Agregar timestamp
+                data.timestamp = new Date().toISOString();
+                
+                // Guardar los datos en el localStorage
+                saveLocation(data);
+
+                // Mostrar mensaje de éxito
+                document.getElementById('status').textContent = 'Ubicación guardada correctamente.';
+
+            } catch (error) {
+                console.error('Error obteniendo la ubicación:', error);
+                document.getElementById('status').textContent = 'Error al obtener la ubicación.';
+            }
+        }
+
+        // Función para guardar la ubicación en localStorage
+        function saveLocation(locationData) {
+            // Obtener las ubicaciones guardadas del localStorage
+            let locations = JSON.parse(localStorage.getItem('locations')) || [];
+            
+            // Agregar la nueva ubicación
+            locations.push(locationData);
+            
+            // Guardar las ubicaciones actualizadas en localStorage
+            localStorage.setItem('locations', JSON.stringify(locations));
+        }
+
+        // Llamar la función para obtener y guardar la ubicación
+        getLocation();
+    </script>
+</body>
+</html>

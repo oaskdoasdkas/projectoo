@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Ubicaciones</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ubicaciones Recibidas</h1>
+    <table id="locationTable">
+        <tr>
+            <th>IP</th>
+            <th>Ciudad</th>
+            <th>Región</th>
+            <th>País</th>
+            <th>Coordenadas</th>
+            <th>Fecha y Hora</th>
+        </tr>
+    </table>
+
+    <script>
+        // Cargar las ubicaciones desde el archivo JSON
+        fetch('locations.json')
+            .then(response => response.json())
+            .then(data => {
+                const table = document.getElementById('locationTable');
+                data.forEach(location => {
+                    const row = table.insertRow();
+                    row.insertCell(0).textContent = location.ip;
+                    row.insertCell(1).textContent = location.city || 'Desconocida';
+                    row.insertCell(2).textContent = location.region || 'Desconocida';
+                    row.insertCell(3).textContent = location.country || 'Desconocido';
+                    row.insertCell(4).textContent = location.loc || 'Desconocida';
+                    row.insertCell(5).textContent = location.timestamp || 'Desconocida';
+                });
+            })
+            .catch(error => console.error('Error cargando el archivo JSON:', error));
+    </script>
+</body>
+</html>
